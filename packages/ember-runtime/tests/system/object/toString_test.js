@@ -2,6 +2,7 @@ import { guidFor, GUID_KEY } from 'ember-utils';
 import { context } from 'ember-environment';
 import EmberObject from '../../../system/object';
 import Namespace from '../../../system/namespace';
+import { NAME_KEY } from 'ember-metal';
 
 let originalLookup = context.lookup;
 let lookup;
@@ -13,6 +14,10 @@ QUnit.module('system/object/toString', {
   teardown() {
     context.lookup = originalLookup;
   }
+});
+
+QUnit.test('NAME_KEY slot is present on Class', function() {
+  ok(EmberObject.extend().hasOwnProperty(NAME_KEY), 'Ember Class\'s have a NAME_KEY slot');
 });
 
 QUnit.test('toString() returns the same value if called twice', function() {

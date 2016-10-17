@@ -36,7 +36,8 @@ import {
   InjectedProperty,
   run,
   destroy,
-  descriptor
+  descriptor,
+  NAME_KEY
 } from 'ember-metal';
 import ActionHandler from '../mixins/action_handler';
 import { validatePropertyInjections } from '../inject';
@@ -560,6 +561,7 @@ var ClassMixinProps = {
   isClass: true,
 
   isMethod: false,
+  [NAME_KEY]: null,
   /**
     Creates a new subclass.
 

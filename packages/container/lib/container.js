@@ -1,6 +1,6 @@
 import { dictionary, symbol, setOwner, OWNER } from 'ember-utils';
 import { ENV } from 'ember-environment';
-import { assert, deprecate, runInDebug } from 'ember-metal';
+import { assert, deprecate, runInDebug, NAME_KEY } from 'ember-metal';
 
 const CONTAINER_OVERRIDE = symbol('CONTAINER_OVERRIDE');
 
@@ -270,7 +270,7 @@ function factoryFor(container, fullName, options = {}) {
     let factoryInjections = factoryInjectionsFor(container, fullName);
     let cacheable = !areInjectionsDynamic(injections) && !areInjectionsDynamic(factoryInjections);
 
-    factoryInjections._toString = registry.makeToString(factory, fullName);
+    factoryInjections[NAME_KEY] = registry.makeToString(factory, fullName);
 
     let injectedFactory = factory.extend(injections);
 

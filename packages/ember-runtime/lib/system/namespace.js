@@ -175,28 +175,32 @@ function superClassString(mixin) {
   }
 }
 
-function classToString() {
-  if (!searchDisabled && !this[NAME_KEY]) {
+function calculateToString(target) {
+  let str;
+
+  if (!searchDisabled) {
     processAllNamespaces();
-  }
-
-  let ret;
-
-  if (this[NAME_KEY]) {
-    ret = this[NAME_KEY];
-  } else if (this._toString) {
-    ret = this._toString;
-  } else {
-    let str = superClassString(this);
+    // can also be set by processAllNamespaces
+    str = target[NAME_KEY];
     if (str) {
-      ret = '(subclass of ' + str + ')';
+      return str;
     } else {
-      ret = '(unknown mixin)';
+      str = superClassString(target);
+      str = str ? '(subclass of ' + str + ')' : str;
     }
-    this.toString = makeToString(ret);
   }
+  if (str) {
+    return str;
+  } else {
+    return '(unknown mixin)';
+  }
+}
 
-  return ret;
+function classToString() {
+  let name = this[NAME_KEY];
+  if (name) { return name; }
+
+  return (this[NAME_KEY] = calculateToString(this));
 }
 
 function processAllNamespaces() {
@@ -219,10 +223,6 @@ function processAllNamespaces() {
 
     clearUnprocessedMixins();
   }
-}
-
-function makeToString(ret) {
-  return () => ret;
 }
 
 Mixin.prototype.toString = classToString; // ES6TODO: altering imported objects. SBB.
